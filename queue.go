@@ -1,13 +1,13 @@
 package batchqueue
 
-// A queue is the local cache for `userq`.
+// A queue is the local cache for userq.
 type queue struct {
-	// the `values` slice is for memory reusing.
-	// When to reuse the local cache, the `values` slice will be
-	// assigned as `values[:0]`.
+	// the values slice is for memory reusing.
+	// When to reuse the local cache, the values slice will be
+	// assigned as values[:0].
 	values []interface{}
 
-	// the `deqIndex` is the index of `values` slice for dequeueing.
+	// the deqIndex is the index of values slice for dequeueing.
 	deqIndex int
 }
 
@@ -18,12 +18,12 @@ func newQueue(capacity int) *queue {
 	return &q
 }
 
-// Enqueue pushes a value to `values` slice.
+// Enqueue pushes a value to values slice.
 func (q *queue) Enqueue(v interface{}) {
 	q.values = append(q.values, v)
 }
 
-// Dequeue pops a value from `values` slice from front side.
+// Dequeue pops a value from values slice from front side.
 func (q *queue) Dequeue() (v interface{}) {
 	v = q.values[q.deqIndex]
 	q.values[q.deqIndex] = nil
@@ -33,12 +33,12 @@ func (q *queue) Dequeue() (v interface{}) {
 
 // A Queue is a message queue with local cache. When its local cache
 // is not full, it won't commit the caching values to the batchqueue.
-// Or it can forcely commit the caching values by `Flush`.
+// Or it can forcely commit the caching values by Flush.
 //
 // A Queue must be used by only one goroutine, because it enqueues
 // or dequeues a value without locking.
 //
-// Using local cache is for less locking.
+// Using local cache for less locking.
 type Queue interface {
 	// Enqueue pushes a value to local cache. When the local cache
 	// is full, it'll be commited to the batchqueue.
